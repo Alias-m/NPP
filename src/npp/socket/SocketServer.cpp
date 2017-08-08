@@ -1,37 +1,23 @@
 #include "SocketServer.hpp"
 
-SocketServer::SocketServer(int port)
+SocketServer::SocketServer(int port): master(NULL)
 {
     WSADATA WSAData;
     WSAStartup(MAKEWORD(2,0), &WSAData);
-    mastersocket = socket(AF_INET , SOCK_STREAM , 0);
-    if(mastersocket == INVALID_SOCKET)
-    {
-        std::cout << WSAGetLastError() << std::endl;
-        exit(errno);
-    }
+    master = new Socket(socket(AF_INET , SOCK_STREAM , 0));
 
     sockaddr_in sin = { 0 };
-
     sin.sin_addr.s_addr = htonl(INADDR_ANY);
     sin.sin_family = AF_INET;
     sin.sin_port = htons(port);
 
-    if(bind (mastersocket, (sockaddr *) &sin, sizeof sin) == SOCKET_ERROR)
-    {
-        std::cout << WSAGetLastError() << std::endl;
-        exit(errno);
-    }
+    master->_bind(&sin);
+    master->_listen();
 
-    if(listen(mastersocket, 32) == SOCKET_ERROR)
-    {
-        std::cout << WSAGetLastError() << std::endl;
-        exit(errno);
-    }
     std::cout << "Server listening on port " << port << std::endl;
 }
 
-void SocketServer::run(std::function<bool(SOCKET)> func)
+void SocketServer::run(std::function<bool(Socket*)> func)
 {
     while(this->wait(func))
     {}
@@ -42,81 +28,46 @@ void SocketServer::run()
     this->run(SocketServer::defaultCallback);
 }
 
-bool SocketServer::wait(std::function<bool(SOCKET)> func)
+bool SocketServer::wait(std::function<bool(Socket*)> func)
 {
     sockaddr_in csin = { 0 };
     int sinsize = sizeof csin;
-    SOCKET csock_tmp = accept(mastersocket, (sockaddr *)&csin, &sinsize);
+    Socket* socket = master->_accept(&csin, sinsize);
+    //TODO : fork
 
-    if(csock_tmp != INVALID_SOCKET)
     {
-        //TODO: fork
-        // traitement
-        func(csock_tmp);
+        auto start = std::chrono::high_resolution_clock::now();
+        func(socket);
+        delete socket;
+        auto elapsed = std::chrono::high_resolution_clock::now() - start;
 
-        closesocket(csock_tmp);
+        long long microseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count();
+        std::cout << "Request performed in "<< (microseconds/1000.0) << " milliseconds" <<std::endl;
     }
-    else
-    {
-        //Exception
-        std::cout << "Unable to connect to client" << std::endl;
-    }
+
+
     return true;
 }
 
-int recv_to(int fd, char *buffer, int len, int flags, int to) {
-
-   fd_set readset;
-   int result = -1;
-   struct timeval tv;
-   FD_ZERO(&readset);
-   FD_SET(fd, &readset);
-   tv.tv_usec = to;
-   result = select(fd+1, &readset, NULL, NULL, &tv);
-
-   // Check status
-   if (result < 0)
-      return -1;
-   else if (result > 0 && FD_ISSET(fd, &readset)) {
-      result = recv(fd, buffer, len, flags);
-      return result;
-   }
-   return -2;
-}
-
-bool SocketServer::defaultCallback(SOCKET socket)
+bool SocketServer::defaultCallback(Socket* socket)
 {
-
     std::string buffer("");
-    char buff[10000];
     Request* request = NULL;
-    fd_set fdset;
-    FD_ZERO(&fdset);
-    struct timeval tv_timeout;
-    tv_timeout.tv_sec = 0;
-    tv_timeout.tv_usec = 500;
-    FD_SET(socket, &fdset);
-    do
-    {
-        if(recv_to(socket, buff, 1, 0, 1) > 0)
-        {
-            buffer += buff;
-            select(socket+1, &fdset, NULL, NULL, &tv_timeout);
-        }
-    }
-    while (FD_ISSET(socket, &fdset));
-
-    FD_CLR(socket, &fdset);
-
+    socket->read(buffer);
     std::cout << buffer << std::endl;
+
+    Response* response = new Response();
     request = Parser::parser.parse(buffer.c_str());
     request->socket = socket;
+    response->socket = socket;
+    request->setResponse(response);
     Router::router.route(request);
+
     delete request;
     return true;
 }
 
 SocketServer::~SocketServer()
 {
-    closesocket(mastersocket);
+    delete master;
 }

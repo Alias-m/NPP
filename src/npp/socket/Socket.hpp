@@ -1,5 +1,6 @@
-#ifndef HTTP_SERVER_SOCKET_H
-#define HTTP_SERVER_SOCKET_H
+#ifndef SOCKET_H
+#define SOCKET_H
+#include <winsock2.h>
 
 #ifdef WIN32 /* si vous êtes sous Windows */
 
@@ -21,26 +22,30 @@ typedef struct sockaddr_in SOCKADDR_IN;
 typedef struct sockaddr SOCKADDR;
 typedef struct in_addr IN_ADDR;
 */
+
 #endif
 #include <winsock2.h>
 #include <iostream>
 #include <functional>
 #include "../parsers/Parser.hpp"
 #include "../Router.hpp"
-#include "Socket.hpp"
-#include <chrono>
 
-class SocketServer
+class Socket
 {
     public:
-        SocketServer(int port);
-        void run(std::function<bool(Socket*)> func);
-        void run();
-        ~SocketServer();
+        Socket(SOCKET s);
+        void _bind(sockaddr_in* sin);
+        void _listen();
+        void _close();
+        int _recv(char* buff, int len, int flags, int to);
+        void read(std::string& buffer);
+        void write(const char* buffer);
+        Socket* _accept(sockaddr_in* csin, int size);
+        ~Socket();
 
     protected:
-        Socket* master;
-        bool static defaultCallback(Socket* socket);
-        bool wait(std::function<bool(Socket*)> func);
+        SOCKET socket;
+        fd_set fdset;
+        struct timeval tv_timeout;
 };
-#endif //HTTP_SERVER_SOCKET_H
+#endif //SOCKET_H
