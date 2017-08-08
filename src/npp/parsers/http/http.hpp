@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include "../Protocol.hpp"
 #include <vector>
+#include "../../streams/http/Request.hpp"
+#include "../../streams/http/Response.hpp"
 
 class Http: public Protocol
 {

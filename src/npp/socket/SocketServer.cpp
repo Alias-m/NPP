@@ -19,8 +19,7 @@ SocketServer::SocketServer(int port): master(NULL)
 
 void SocketServer::run(std::function<bool(Socket*)> func)
 {
-    while(this->wait(func))
-    {}
+    while(this->wait(func));
 }
 
 void SocketServer::run()
@@ -56,11 +55,9 @@ bool SocketServer::defaultCallback(Socket* socket)
     socket->read(buffer);
     std::cout << buffer << std::endl;
 
-    Response* response = new Response();
     request = Parser::parser.parse(buffer.c_str());
     request->socket = socket;
-    response->socket = socket;
-    request->setResponse(response);
+    request->response->socket = socket;
     Router::router.route(request);
 
     delete request;

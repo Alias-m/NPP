@@ -1,6 +1,5 @@
 #ifndef RESPONSE_H
 #define RESPONSE_H
-#include <winsock2.h>
 
 class Socket;
 class SocketServer;
@@ -8,14 +7,17 @@ class SocketServer;
 class Response
 {
     friend class SocketServer;
+    friend class Http;
 private:
     bool sending;
     Socket* socket;
+
 public:
     Response(bool s = true);
+    virtual const char* createResponse() = 0;
     void setAutoSending(bool sending);
     void send();
-    ~Response();
+    virtual ~Response() {};
 };
 
 #endif // RESPONSE_H
