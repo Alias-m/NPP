@@ -17,6 +17,7 @@ void Router::route(const Request* request) const
     }
 }
 
+//voor elkar
 void Router::addRoute(const char* route, EndPoint* endPoint)
 {
     endPoints.put(route, endPoint);

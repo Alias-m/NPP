@@ -7,7 +7,7 @@ class Router;
 class EndPoint
 {
 public:
-    EndPoint(std::string route);
+    EndPoint(const char* route);
     virtual void operator()(const Request* request) = 0;
 
 };

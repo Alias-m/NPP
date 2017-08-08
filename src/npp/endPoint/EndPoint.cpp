@@ -1,6 +1,7 @@
 #include "EndPoint.hpp"
 #include "../Router.hpp"
 
-EndPoint::EndPoint(std::string route){
-    Router::router.addRoute(route.c_str(), this);
+EndPoint::EndPoint(const char* route){
+    std::cout << "New route : " << route << std::endl;
+    Router::router.addRoute(route, this);
 }

@@ -8,6 +8,7 @@
 class HttpEndPoint: public EndPoint
 {
     public:
+        HttpEndPoint(const char* route):EndPoint(route){}
         virtual void operator()(const Request* request);
         inline virtual void _get(const Request* request) const {}
         inline virtual void _post(const Request* request) const {}
@@ -17,8 +18,9 @@ class HttpEndPoint: public EndPoint
         //Todo: add function
 };
 
+typedef void(HttpEndPoint::* httpMethod)(const Request* request) const;
+
 class HttpLinker{
-    typedef void(HttpEndPoint::* httpMethod)(const Request* request) const;
 private:
     Factory<httpMethod> methods;
     HttpLinker();
@@ -26,4 +28,5 @@ public:
     static HttpLinker linker;
     httpMethod link(std::string method);
 };
+
 #endif //HTTP_ENDPOINT_H
