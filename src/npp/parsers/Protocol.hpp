@@ -8,6 +8,6 @@
 class Protocol
 {
     public:
-        virtual Request* parse(char* method, char* route, std::vector<std::string> request) const = 0;
+        virtual Request* parse(char* method, char* route, std::vector<std::string> request) = 0;
 };
 #endif //PROTOCOL_H
