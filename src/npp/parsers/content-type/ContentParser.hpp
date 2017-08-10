@@ -13,7 +13,7 @@ class ElementObject;
 class ContentParser
 {
     public:
-        virtual Element* parse(std::string& text) const = 0;
+        virtual void parse(std::string& text, Element** e) const = 0;
         virtual void parseContent(std::string& text, ElementInt* e) const = 0;
         virtual void parseContent(std::string& text, ElementString* e) const = 0;
         virtual void parseContent(std::string& text, ElementBoolean* e) const = 0;

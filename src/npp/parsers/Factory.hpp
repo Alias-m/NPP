@@ -7,6 +7,7 @@
 
 template<typename V> class Factory
 {
+    typedef typename std::map<const char*, V>::const_iterator factory_iterator;
     private:
         const int keycmp(const char* key, const char* protocol) const{
             int i = 0;
@@ -17,6 +18,12 @@ template<typename V> class Factory
 	public:
 		void put(const char* key, V value);
 		V get(const char* key) const;
+		factory_iterator begin(){
+            return items.begin();
+        }
+		factory_iterator end(){
+            return items.end();
+        }
 };
 
 template <typename V> V Factory<V>::get(const char* key) const{

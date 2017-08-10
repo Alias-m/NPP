@@ -2,7 +2,7 @@
 
 VideoEndPoint VideoEndPoint::singleton("/videos");
 
-void VideoEndPoint::_get(const Request* request) const
+void VideoEndPoint::_post(const Request* request) const
 {
-    std::cout << "Endpoint reached" << std::endl;
+    request->response->body = request->body;
 }

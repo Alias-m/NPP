@@ -26,5 +26,5 @@ Request* Parser::parse(const char* request) const
         return p->parse(method, route, req, body);
     else//TODO: exception
         std::cout << "Unknown Protocol : " << protocol << std::endl;
-    return NULL;
+    return nullptr;
 }

@@ -5,8 +5,7 @@ XmlParser XmlParser::parser;
 XmlParser::XmlParser() {}
 XmlParser::~XmlParser() {}
 
-Element* XmlParser::parse(std::string& text) const{
-    return 0;
+void XmlParser::parse(std::string& text, Element** e) const{
 }
 
 void XmlParser::parseContent(std::string& text, ElementInt* e) const

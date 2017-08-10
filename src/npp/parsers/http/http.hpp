@@ -11,11 +11,15 @@
 #include "../content-type/JsonParser.hpp"
 #include "../content-type/XmlParser.hpp"
 
+//class JsonParser;
+//class XmlParser;
 class Http: public Protocol
 {
+    friend class HttpResponse;
+    friend class HttpRequest;
     private:
         Http();
-        Factory<void(*)(const char* key, Http* http)> httpItem;
+        Factory<void(*)(const char* key, Http* http, Request* req, Response* res)> httpItem;
         Factory<ContentParser*> contentType;
         ContentParser* parser;
     public:

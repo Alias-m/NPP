@@ -2,7 +2,12 @@
 #include <iostream>
 #include <stdio.h>
 
+
 HttpResponse::HttpResponse(bool s): Response(s), code(404), status("Not Found"){
+
+    contentTypes.put("application/json", &JsonCreator::parser);
+
+
     parameters["Date"] = "Thu, 19 Feb 2009 12:27:04 GMT";
     parameters["Server"] = "Apache/2.2.3";
     parameters["Last-Modified"] = "Wed, 18 Jun 2003 16:05:58 GMT";
@@ -36,8 +41,9 @@ void HttpResponse::setParameter(const char* key, const char* value){
 }
 
 std::string HttpResponse::getBody(){
-    std::string body("TEST RETURN ...");
-    return body.c_str();
+    std::string bodyText;
+    contentTypes.get(contentType.c_str())->parse(bodyText, &body);
+    return bodyText.c_str();
 }
 
 const char* HttpResponse::createResponse(){

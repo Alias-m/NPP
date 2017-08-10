@@ -10,8 +10,6 @@ class Element
     public:
         virtual void getValue(void* v) = 0;
         virtual void read(std::string& text, const ContentParser* parser) {};
-        virtual ~Element(){
-        }
 };
 
 class ElementInt: public Element

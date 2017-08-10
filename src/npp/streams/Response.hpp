@@ -1,5 +1,6 @@
 #ifndef RESPONSE_H
 #define RESPONSE_H
+#include "Element.hpp"
 
 class Socket;
 class SocketServer;
@@ -13,11 +14,13 @@ private:
     Socket* socket;
 
 public:
+    std::string contentType;
+    Element* body;
     Response(bool s = true);
     virtual const char* createResponse() = 0;
     void setAutoSending(bool sending);
     void send();
-    virtual ~Response() {};
+    virtual ~Response() { delete body;};
 };
 
 #endif // RESPONSE_H

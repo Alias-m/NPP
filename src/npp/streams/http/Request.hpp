@@ -14,11 +14,6 @@ class HttpRequest: public Request
 {
     friend class Router;
 private:
-    std::map<std::string, std::string> path;
-    std::map<std::string, std::string> query;
-    std::map<std::string, std::string> body;
-    Socket* socket;
-    Response* response;
 public:
     const std::string route;
     const std::string method;

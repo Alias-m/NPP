@@ -19,12 +19,7 @@ void split(const std::string &s, char delim, Out result, const int limit) {
     }
 }
 
-std::vector<std::string> split(const std::string &s, char delim, const int limit = -1) {
-    std::vector<std::string> elems;
-    split(s, delim, std::back_inserter(elems), limit);
-    return elems;
-}
-
+std::vector<std::string> split(const std::string &s, char delim, const int limit = -1);
 
 JsonParser::JsonParser() {
     elements['{'] = []() -> Element*{return new ElementObject();};
@@ -35,8 +30,7 @@ JsonParser::JsonParser() {
 }
 JsonParser::~JsonParser() {}
 
-Element* JsonParser::parse(std::string& text) const{
-    Element* e;
+void JsonParser::parse(std::string& text, Element** e) const{
     int i = 0;
     for(i = 0;text[i] == '\t' || text[i] == ' ' || text[i] == ','; i++);
     text = text.substr(i);
@@ -46,14 +40,13 @@ Element* JsonParser::parse(std::string& text) const{
     if(it == elements.end()){
         for(i = 0; text[i] < 0x3A && text[i] > 0x2F ; i++);
         if(text[i] == '.')
-            e = new ElementDouble();
+            *e = new ElementDouble();
         else
-            e = new ElementInt();
+            *e = new ElementInt();
     }
     else
-        e = it->second();
-    e->read(text, this);
-    return e;
+        *e = it->second();
+    (*e)->read(text, this);
 }
 
 void JsonParser::parseContent(std::string& text, ElementDouble* e) const
@@ -122,13 +115,13 @@ void JsonParser::parseContent(std::string& text, ElementBoolean* e) const
 
 void JsonParser::parseContent(std::string& text, ElementArray* e) const
 {
-    Element* child = NULL;
     std::string key;
     char end = text[1];
     text = text.substr(1);
     while(end != ']')
     {
-        child = parse(text);
+        Element* child = NULL;
+        parse(text, &child);
         int i;
         for(i = 0;text[i] == '\t' || text[i] == ' ' || text[i] == ','; i++);
         end = text[0];
@@ -141,10 +134,10 @@ void JsonParser::parseContent(std::string& text, ElementObject* e) const
 {
     text = text.substr(1);
     int start, cpt, i;
-    Element* child = NULL;
     char end = text[1];
     while(end != '}')
     {
+        Element* child = NULL;
         std::string key;
         for(start = -1, cpt = 0, i = 0; ; i++)
         {
@@ -171,11 +164,24 @@ void JsonParser::parseContent(std::string& text, ElementObject* e) const
             }
         }
         text = text.substr(i + 2);
-        child = parse(text);
+        parse(text, &child);
         for(i = 0;text[i] == '\t' || text[i] == ' ' || text[i] == ','; i++);
         text = text.substr(i);
         end = text[0];
-        e->values.put(key.c_str(), child);
+        e->values[new std::string(key)] = child;
+
     }
     text = text.substr(1);
+}
+
+
+
+namespace patch
+{
+    template < typename T > std::string to_string( const T& n )
+    {
+        std::ostringstream stm ;
+        stm << n ;
+        return stm.str() ;
+    }
 }

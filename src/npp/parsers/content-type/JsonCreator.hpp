@@ -1,13 +1,13 @@
-#ifndef JSONPARSER_H
-#define JSONPARSER_H
+#ifndef JSONCREATOR_H
+#define JSONCREATOR_H
 #include "ContentParser.hpp"
 #include <functional>
 #include <map>
 
-class JsonParser: public ContentParser
+class JsonCreator: public ContentParser
 {
     public:
-        static JsonParser parser;
+        static JsonCreator parser;
         void parse(std::string& text, Element** e) const;
         void parseContent(std::string& text, ElementInt* e) const;
         void parseContent(std::string& text, ElementString* e) const;
@@ -16,8 +16,7 @@ class JsonParser: public ContentParser
         void parseContent(std::string& text, ElementObject* e) const;
         void parseContent(std::string& text, ElementDouble* e) const;
     private:
-        std::map<const char, std::function<Element*()>> elements;
-        JsonParser();
-        ~JsonParser();
+        JsonCreator();
+        ~JsonCreator();
 };
-#endif //JSONPARSER_H
+#endif //JSONCREATOR_H

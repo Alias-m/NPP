@@ -7,7 +7,7 @@ class VideoEndPoint: public HttpEndPoint
 public:
     VideoEndPoint(const char* route):HttpEndPoint(route){}
     static VideoEndPoint singleton;
-    void _get(const Request* request) const;
+    void _post(const Request* request) const;
 
 };
 

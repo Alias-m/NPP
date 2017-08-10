@@ -36,16 +36,21 @@ Request* Http::parse(char* method, char* route, std::vector<std::string> request
         std::vector<std::string> elements = split(*it, ':', 1);
         auto func = httpItem.get(elements[0].c_str());
         if(func)
-            func(elements[1].substr(1, elements[1].length() - 2).c_str(), this);
+            func(elements[1].substr(1, elements[1].length() - 2).c_str(), this, r, response);
     }
+    r->body = new ElementInt();
     if(parser)
-        r->body = parser->parse(body);
+        parser->parse(body, &r->body);
     return r;
 }
 
 Http::Http()
 {
-    httpItem.put("Content-Type", [](const char* key, Http* http) -> void{http->parser = http->contentType.get(key);});
+    httpItem.put("Content-Type", [](const char* key, Http* http, Request* req, Response* res) -> void
+                 {
+                     res->contentType = key;
+                     http->parser = http->contentType.get(key);
+                 });
     contentType.put("application/json", &JsonParser::parser);
     contentType.put("application/xml", &XmlParser::parser);
 }

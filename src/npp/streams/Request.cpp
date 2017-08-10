@@ -9,5 +9,11 @@ void Request::setResponse(Response* response){
 
 Request::~Request()
 {
-    delete response;
+    if(response->body == body)
+        delete response;
+    else
+    {
+        delete response;
+        delete body;
+    }
 }

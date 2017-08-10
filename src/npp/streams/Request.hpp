@@ -16,13 +16,13 @@ class Request
     friend class Router;
 private:
     Socket* socket;
-    Response* response;
 public:
+    Response* response;
     Element* body;
     const std::string route;
     const std::string method;
     Request(const std::string r, const std::string m);
-    ~Request();
+    virtual ~Request();
     void setResponse(Response* response);
 
 
