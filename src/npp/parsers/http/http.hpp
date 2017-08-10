@@ -20,7 +20,7 @@ class Http: public Protocol
         ContentParser* parser;
     public:
         static Http http;
-        Request* parse(char* method, char* route, std::vector<std::string> request);
+        Request* parse(char* method, char* route, std::vector<std::string> request, std::string& body);
         ~Http();
 };
 #endif //HTTP_PROTOCOL_H

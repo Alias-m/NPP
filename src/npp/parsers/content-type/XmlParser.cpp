@@ -5,6 +5,35 @@ XmlParser XmlParser::parser;
 XmlParser::XmlParser() {}
 XmlParser::~XmlParser() {}
 
-Element* XmlParser::parse(const char* text) const{
+Element* XmlParser::parse(std::string& text) const{
     return 0;
+}
+
+void XmlParser::parseContent(std::string& text, ElementInt* e) const
+{
+
+}
+
+void XmlParser::parseContent(std::string& text, ElementDouble* e) const
+{
+
+}
+void XmlParser::parseContent(std::string& text, ElementString* e) const
+{
+
+}
+
+void XmlParser::parseContent(std::string& text, ElementBoolean* e) const
+{
+
+}
+
+void XmlParser::parseContent(std::string& text, ElementArray* e) const
+{
+
+}
+
+void XmlParser::parseContent(std::string& text, ElementObject* e) const
+{
+
 }

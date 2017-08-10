@@ -4,7 +4,7 @@
 #include <vector>
 #include <iterator>
 #include <cstring>
-
+/*
 template<typename Out>
 void split(const std::string &s, char delim, Out result, const int limit) {
     std::stringstream ss;
@@ -21,10 +21,12 @@ std::vector<std::string> split(const std::string &s, char delim, const int limit
     split(s, delim, std::back_inserter(elems), limit);
     return elems;
 }
+*/
+std::vector<std::string> split(const std::string &s, char delim, const int limit = -1);
 
 Http Http::http;
 
-Request* Http::parse(char* method, char* route, std::vector<std::string> request)
+Request* Http::parse(char* method, char* route, std::vector<std::string> request, std::string& body)
 {
     Request* r = new HttpRequest(route, method);
     Response* response = new HttpResponse();
@@ -36,6 +38,8 @@ Request* Http::parse(char* method, char* route, std::vector<std::string> request
         if(func)
             func(elements[1].substr(1, elements[1].length() - 2).c_str(), this);
     }
+    if(parser)
+        r->body = parser->parse(body);
     return r;
 }
 

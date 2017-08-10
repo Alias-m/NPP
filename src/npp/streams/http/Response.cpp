@@ -60,10 +60,8 @@ const char* HttpResponse::createResponse(){
         response.append(": ");
         response.append((it)->second);
         response.append("\n");
-        std::cout << " ---> "<< (it)->first << ": " << (it)->second << std::endl;
     }
     response.append("\n");
     response.append(body);
-    std::cout << std::endl << std::endl << "FINAL " << response << std::endl;
     return response.c_str();
 }

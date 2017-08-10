@@ -1,6 +1,8 @@
 #ifndef HTTP_SERVER_SOCKET_H
 #define HTTP_SERVER_SOCKET_H
 
+#include <thread>
+
 #ifdef WIN32 /* si vous êtes sous Windows */
 
 #include <winsock2.h>

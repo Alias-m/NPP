@@ -4,6 +4,7 @@
 #include <map>
 #include <winsock2.h>
 #include "Response.hpp"
+#include "Element.hpp"
 
 class Socket;
 class SocketServer;
@@ -14,12 +15,10 @@ class Request
     friend class SocketServer;
     friend class Router;
 private:
-    std::map<std::string, std::string> path;
-    std::map<std::string, std::string> query;
-    std::map<std::string, std::string> body;
     Socket* socket;
     Response* response;
 public:
+    Element* body;
     const std::string route;
     const std::string method;
     Request(const std::string r, const std::string m);

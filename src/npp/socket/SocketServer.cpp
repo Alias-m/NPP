@@ -32,19 +32,8 @@ bool SocketServer::wait(std::function<bool(Socket*)> func)
     sockaddr_in csin = { 0 };
     int sinsize = sizeof csin;
     Socket* socket = master->_accept(&csin, sinsize);
-    //TODO : fork
-
-    {
-        auto start = std::chrono::high_resolution_clock::now();
-        func(socket);
-        delete socket;
-        auto elapsed = std::chrono::high_resolution_clock::now() - start;
-
-        long long microseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count();
-        std::cout << "Request performed in "<< (microseconds/1000.0) << " milliseconds" <<std::endl;
-    }
-
-
+    std::thread connection (func, socket);
+    connection.detach();
     return true;
 }
 
@@ -53,14 +42,19 @@ bool SocketServer::defaultCallback(Socket* socket)
     std::string buffer("");
     Request* request = NULL;
     socket->read(buffer);
-    std::cout << buffer << std::endl;
+    if(buffer.length()){
+        auto start = std::chrono::high_resolution_clock::now();
+        request = Parser::parser.parse(buffer.c_str());
+        request->socket = socket;
+        request->response->socket = socket;
+        Router::router.route(request);
+        delete request;
+        delete socket;
+        auto end = std::chrono::high_resolution_clock::now();
+        long long microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        std::cout << "Request performed in "<< (microseconds/1000.0) << " milliseconds" <<std::endl;
+    }
 
-    request = Parser::parser.parse(buffer.c_str());
-    request->socket = socket;
-    request->response->socket = socket;
-    Router::router.route(request);
-
-    delete request;
     return true;
 }
 

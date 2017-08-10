@@ -6,7 +6,13 @@ class XmlParser: public ContentParser
 {
     public:
         static XmlParser parser;
-        Element* parse(const char* text) const;
+        Element* parse(std::string& text) const;
+        void parseContent(std::string& text, ElementInt* e) const;
+        void parseContent(std::string& text, ElementString* e) const;
+        void parseContent(std::string& text, ElementBoolean* e) const;
+        void parseContent(std::string& text, ElementArray* e) const;
+        void parseContent(std::string& text, ElementObject* e) const;
+        void parseContent(std::string& text, ElementDouble* e) const;
 
     private:
         XmlParser();
