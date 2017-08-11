@@ -1,7 +1,7 @@
 #include "Response.hpp"
 #include "../socket/Socket.hpp"
 
-Response::Response(bool s):sending(s){
+Response::Response(bool s):sending(s), body(nullptr){
 }
 
 void Response::setAutoSending(bool sending){

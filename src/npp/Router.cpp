@@ -5,7 +5,7 @@ Router Router::router;
 Router::Router(){
 }
 
-void Router::route(const Request* request) const
+void Router::route(Request* request) const
 {
     EndPoint* endPoint = endPoints.get(request->route.c_str());
     if(endPoint)

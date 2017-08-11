@@ -2,7 +2,7 @@
 
 XmlParser XmlParser::parser;
 
-XmlParser::XmlParser() {}
+XmlParser::XmlParser():ContentParser("application/xml") {}
 XmlParser::~XmlParser() {}
 
 void XmlParser::parse(std::string& text, Element** e) const{

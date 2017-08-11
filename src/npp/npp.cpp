@@ -1,4 +1,4 @@
-#include "../../includes/npp.hpp"
+#include "../includes/npp.hpp"
 
 NppServer::NppServer(const int port): server(port){
 }

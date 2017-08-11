@@ -5,9 +5,8 @@
 #include <map>
 #include "Protocol.hpp"
 #include "../streams/Request.hpp"
-#include "http/http.hpp"
 #include <cstring>
-#include "Factory.hpp"
+#include "../utils/Factory.hpp"
 #include <sstream>
 #include <vector>
 #include <iterator>
@@ -17,10 +16,9 @@ class Parser
     public:
         static Parser parser;
         Request* parse(const char* request) const;
+        static Factory<Protocol*> parsers;
     private:
-        Factory<Protocol*> parsers;
         Parser() {
-            parsers.put("HTTP/1.1", &Http::http);
         }
         ~Parser() {}
 };

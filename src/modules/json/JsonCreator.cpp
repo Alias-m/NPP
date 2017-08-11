@@ -1,11 +1,12 @@
 #include "JsonCreator.hpp"
-#include "../../streams/Element.hpp"
+#include "../../npp/streams/Element.hpp"
 #include <iostream>
 #include <algorithm>
 #include <sstream>
 #include <vector>
 #include <iterator>
 #include <cstring>
+
 JsonCreator JsonCreator::parser;
 
 namespace patch
@@ -35,9 +36,11 @@ std::vector<std::string> split(const std::string &s, char delim, const int limit
 }
 
 
-JsonCreator::JsonCreator() {
+JsonCreator::JsonCreator():ContentCreator("application/json"){
 }
-JsonCreator::~JsonCreator() {}
+
+JsonCreator::~JsonCreator() {
+}
 
 void JsonCreator::parse(std::string& text, Element** e) const{
     if(*e)

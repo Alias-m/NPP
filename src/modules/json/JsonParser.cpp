@@ -1,5 +1,5 @@
 #include "JsonParser.hpp"
-#include "../../streams/Element.hpp"
+#include "../../npp/streams/Element.hpp"
 #include <iostream>
 #include <algorithm>
 #include <sstream>
@@ -21,7 +21,7 @@ void split(const std::string &s, char delim, Out result, const int limit) {
 
 std::vector<std::string> split(const std::string &s, char delim, const int limit = -1);
 
-JsonParser::JsonParser() {
+JsonParser::JsonParser():ContentParser("application/json") {
     elements['{'] = []() -> Element*{return new ElementObject();};
     elements['['] = []() -> Element*{return new ElementArray();};
     elements['\"'] = []() -> Element*{return new ElementString();};
@@ -134,8 +134,7 @@ void JsonParser::parseContent(std::string& text, ElementObject* e) const
 {
     text = text.substr(1);
     int start, cpt, i;
-    char end = text[1];
-    while(end != '}')
+    while(text[0] != '}')
     {
         Element* child = NULL;
         std::string key;
@@ -167,7 +166,6 @@ void JsonParser::parseContent(std::string& text, ElementObject* e) const
         parse(text, &child);
         for(i = 0;text[i] == '\t' || text[i] == ' ' || text[i] == ','; i++);
         text = text.substr(i);
-        end = text[0];
         e->values[new std::string(key)] = child;
 
     }

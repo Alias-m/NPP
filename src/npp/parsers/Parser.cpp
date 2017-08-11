@@ -1,6 +1,7 @@
 #include "Parser.hpp"
 
 Parser Parser::parser;
+Factory<Protocol*> Parser::parsers;
 
 Request* Parser::parse(const char* request) const
 {
@@ -21,7 +22,7 @@ Request* Parser::parse(const char* request) const
     while(getline(ss, tok))
         body.append(tok);
 
-    Protocol* p = parsers.get(protocol);
+    Protocol* p = Parser::parsers.get(protocol);
     if(p)
         return p->parse(method, route, req, body);
     else//TODO: exception

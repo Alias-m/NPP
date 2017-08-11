@@ -1,6 +1,6 @@
 #ifndef NppServer_H
 #define NppServer_H
-#include "../src/npp/socket/SocketServer.hpp"
+#include "../npp/socket/SocketServer.hpp"
 class NppServer
 {
 private:

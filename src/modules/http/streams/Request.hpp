@@ -4,7 +4,7 @@
 #include <map>
 #include <winsock2.h>
 #include "Response.hpp"
-#include "../Request.hpp"
+#include "../../../npp/streams/Request.hpp"
 
 class Socket;
 class SocketServer;

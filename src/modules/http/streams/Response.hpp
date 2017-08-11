@@ -2,9 +2,8 @@
 #define HTTP_RESPONSE_H
 #include <map>
 #include <string>
-#include "../Response.hpp"
 #include <sstream>
-#include "../../parsers/content-type/JsonCreator.hpp"
+#include "../../../npp/streams/Response.hpp"
 
 class Socket;
 class SocketServer;
@@ -21,10 +20,11 @@ namespace patch
 
 class HttpResponse: public Response
 {
+    friend class HttpEndPoint;
     friend class Http;
     friend class SocketServer;
 private:
-    Factory<ContentParser*> contentTypes;
+    //Factory<ContentParser*> contentTypes;
     bool sending;
     Socket* socket;
     //http stuff

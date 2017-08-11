@@ -46,13 +46,14 @@ Request* Http::parse(char* method, char* route, std::vector<std::string> request
 
 Http::Http()
 {
+    Parser::parsers.put("HTTP/1.1", &Http::http);
     httpItem.put("Content-Type", [](const char* key, Http* http, Request* req, Response* res) -> void
                  {
                      res->contentType = key;
-                     http->parser = http->contentType.get(key);
+                     http->parser = ContentParser::contentType.get(key);
                  });
-    contentType.put("application/json", &JsonParser::parser);
-    contentType.put("application/xml", &XmlParser::parser);
+    //contentType.put("application/json", &JsonParser::parser);
+    //contentType.put("application/xml", &XmlParser::parser);
 }
 
 Http::~Http()

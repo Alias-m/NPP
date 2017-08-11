@@ -48,6 +48,7 @@ bool SocketServer::defaultCallback(Socket* socket)
         request->socket = socket;
         request->response->socket = socket;
         Router::router.route(request);
+        request->response->send();
         delete request;
         delete socket;
         auto end = std::chrono::high_resolution_clock::now();

@@ -1,10 +1,10 @@
 #ifndef JSONCREATOR_H
 #define JSONCREATOR_H
-#include "ContentParser.hpp"
+#include "../../npp/parsers/content-type/ContentParser.hpp"
 #include <functional>
 #include <map>
 
-class JsonCreator: public ContentParser
+class JsonCreator: public ContentCreator
 {
     public:
         static JsonCreator parser;

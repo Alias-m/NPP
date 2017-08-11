@@ -2,7 +2,9 @@
 
 VideoEndPoint VideoEndPoint::singleton("/videos");
 
-void VideoEndPoint::_post(const Request* request) const
+void VideoEndPoint::_post(const HttpRequest* request) const
 {
-    request->response->body = request->body;
+    Video v("Name", 42, 1, 10, "User");
+    v.generate(request->body);
+    request->response->setBody(v);
 }

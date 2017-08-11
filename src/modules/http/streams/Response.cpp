@@ -3,10 +3,9 @@
 #include <stdio.h>
 
 
-HttpResponse::HttpResponse(bool s): Response(s), code(404), status("Not Found"){
+HttpResponse::HttpResponse(bool s): Response(s), code(200), status("OK"){
 
-    contentTypes.put("application/json", &JsonCreator::parser);
-
+    //contentTypes.put("application/json", &JsonCreator::parser);
 
     parameters["Date"] = "Thu, 19 Feb 2009 12:27:04 GMT";
     parameters["Server"] = "Apache/2.2.3";
@@ -33,7 +32,6 @@ HttpResponse::HttpResponse(bool s): Response(s), code(404), status("Not Found"){
 
 HttpResponse::~HttpResponse()
 {
-    this->send();
 }
 
 void HttpResponse::setParameter(const char* key, const char* value){
@@ -42,7 +40,8 @@ void HttpResponse::setParameter(const char* key, const char* value){
 
 std::string HttpResponse::getBody(){
     std::string bodyText;
-    contentTypes.get(contentType.c_str())->parse(bodyText, &body);
+    if(body)
+        ContentCreator::contentType.get(contentType.c_str())->parse(bodyText, &body);
     return bodyText.c_str();
 }
 
@@ -53,7 +52,6 @@ const char* HttpResponse::createResponse(){
     std::string test;
     test.append(patch::to_string(body.length()));
     setParameter("Content-Length", test.c_str());
-
 
     response.append("HTTP/1.1 ");
     response.append(patch::to_string(code));
