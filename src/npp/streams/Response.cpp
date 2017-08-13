@@ -1,16 +1,16 @@
-#include "Response.hpp"
+#include "../../includes/npp.hpp"
 #include "../socket/Socket.hpp"
 
-Response::Response(bool s):sending(s), body(nullptr){
+npp::Response::Response(bool s):sending(s), body(nullptr){
 }
 
-void Response::setAutoSending(bool sending){
+void npp::Response::setAutoSending(bool sending){
     this->sending = sending;
 }
 
-void Response::send(){
+void npp::Response::send(npp::NppServer* server){
     if(sending){
         sending = false;
-        socket->write(this->createResponse());
+        socket->write(this->createResponse(server));
     }
 }

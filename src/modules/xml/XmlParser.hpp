@@ -1,11 +1,10 @@
 #ifndef XMLPARSER_H
 #define XMLPARSER_H
-#include "../../npp/parsers/content-type/ContentParser.hpp"
+#include "../../includes/npp_parser.hpp"
 
-class XmlParser: public ContentParser
+class XmlParser: public npp::ContentParser
 {
     public:
-        static XmlParser parser;
         void parse(std::string& text, Element** e) const;
         void parseContent(std::string& text, ElementInt* e) const;
         void parseContent(std::string& text, ElementString* e) const;
@@ -13,9 +12,9 @@ class XmlParser: public ContentParser
         void parseContent(std::string& text, ElementArray* e) const;
         void parseContent(std::string& text, ElementObject* e) const;
         void parseContent(std::string& text, ElementDouble* e) const;
+        XmlParser(npp::NppServer* server);
+        ~XmlParser();
 
     private:
-        XmlParser();
-        ~XmlParser();
 };
 #endif //XMLPARSER_H

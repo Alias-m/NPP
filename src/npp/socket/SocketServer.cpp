@@ -1,11 +1,12 @@
 #include "SocketServer.hpp"
 
-SocketServer::SocketServer(int port): master(NULL)
+SocketServer::SocketServer(npp::NppServer* s, int port): master(NULL), server(s)
 {
+    #ifdef _WIN32
     WSADATA WSAData;
     WSAStartup(MAKEWORD(2,0), &WSAData);
+    #endif // _WIN32
     master = new Socket(socket(AF_INET , SOCK_STREAM , 0));
-
     sockaddr_in sin = { 0 };
     sin.sin_addr.s_addr = htonl(INADDR_ANY);
     sin.sin_family = AF_INET;
@@ -17,7 +18,7 @@ SocketServer::SocketServer(int port): master(NULL)
     std::cout << "Server listening on port " << port << std::endl;
 }
 
-void SocketServer::run(std::function<bool(Socket*)> func)
+void SocketServer::run(std::function<bool(Socket*, npp::NppServer*)> func)
 {
     while(this->wait(func));
 }
@@ -27,28 +28,36 @@ void SocketServer::run()
     this->run(SocketServer::defaultCallback);
 }
 
-bool SocketServer::wait(std::function<bool(Socket*)> func)
+bool SocketServer::wait(std::function<bool(Socket*, npp::NppServer*)> func)
 {
     sockaddr_in csin = { 0 };
     int sinsize = sizeof csin;
     Socket* socket = master->_accept(&csin, sinsize);
-    std::thread connection (func, socket);
+    #ifdef _WIN32
+    std::thread connection (func, socket, server);
     connection.detach();
+    #else
+    if(!fork())
+    {
+        func(socket, server);
+        _exit(0);
+    }
+    #endif // _WIN32
     return true;
 }
 
-bool SocketServer::defaultCallback(Socket* socket)
+bool SocketServer::defaultCallback(Socket* socket, npp::NppServer* server)
 {
     std::string buffer("");
-    Request* request = NULL;
+    npp::Request* request = NULL;
     socket->read(buffer);
     if(buffer.length()){
         auto start = std::chrono::high_resolution_clock::now();
-        request = Parser::parser.parse(buffer.c_str());
+        request = server->parseProtocol(buffer.c_str());
         request->socket = socket;
         request->response->socket = socket;
-        Router::router.route(request);
-        request->response->send();
+        server->router->route(request);
+        request->response->send(server);
         delete request;
         delete socket;
         auto end = std::chrono::high_resolution_clock::now();

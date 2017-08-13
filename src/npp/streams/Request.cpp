@@ -1,13 +1,13 @@
-#include "Request.hpp"
+#include "../../includes/npp.hpp"
 
-Request::Request(const std::string r, const std::string m): route(r), method(m){
+npp::Request::Request(const std::string r, const std::string m): route(r), method(m){
 }
 
-void Request::setResponse(Response* response){
+void npp::Request::setResponse(Response* response){
     this->response = response;
 }
 
-Request::~Request()
+npp::Request::~Request()
 {
     //response->body = body;
     if(response->body == body)

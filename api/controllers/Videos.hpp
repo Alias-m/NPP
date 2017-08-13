@@ -7,8 +7,7 @@
 class VideoEndPoint: public HttpEndPoint
 {
 public:
-    VideoEndPoint(const char* route):HttpEndPoint(route){}
-    static VideoEndPoint singleton;
+    VideoEndPoint(const char* route, npp::NppServer* server):HttpEndPoint(server, route){}
     void _post(const HttpRequest* request) const;
 
 };

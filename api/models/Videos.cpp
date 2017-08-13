@@ -4,12 +4,12 @@ Video::Video(std::string n, int l, int d, int c, std::string u): name(n), like(l
 }
 
 Element* Video::toElement() const{
-    ElementObject* e = ElementCreator::creator.object();
-    ElementCreator::creator.put(e, "name", ElementCreator::creator.create(name.c_str()))
-        ->put(e, "like", ElementCreator::creator.create(like))
-        ->put(e, "dislike", ElementCreator::creator.create(dislike))
-        ->put(e, "comment", ElementCreator::creator.create(comment))
-        ->put(e, "user", ElementCreator::creator.create(user.c_str()));
+    ElementObject* e = npp::ElementCreator::creator.object();
+    npp::ElementCreator::creator.put(e, "name", npp::ElementCreator::creator.create(name.c_str()))
+        ->put(e, "like", npp::ElementCreator::creator.create(like))
+        ->put(e, "dislike", npp::ElementCreator::creator.create(dislike))
+        ->put(e, "comment", npp::ElementCreator::creator.create(comment))
+        ->put(e, "user", npp::ElementCreator::creator.create(user.c_str()));
     return e;
 }
 

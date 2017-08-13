@@ -1,13 +1,11 @@
 #include "Router.hpp"
 
-Router Router::router;
-
 Router::Router(){
 }
 
-void Router::route(Request* request) const
+void Router::route(npp::Request* request) const
 {
-    EndPoint* endPoint = endPoints.get(request->route.c_str());
+    npp::EndPoint* endPoint = endPoints.get(request->route.c_str());
     if(endPoint)
         (*endPoints.get(request->route.c_str()))(request);
     else
@@ -17,7 +15,7 @@ void Router::route(Request* request) const
     }
 }
 
-void Router::addRoute(const char* route, EndPoint* endPoint)
+void Router::addRoute(const char* route, npp::EndPoint* endPoint)
 {
     endPoints.put(route, endPoint);
 }

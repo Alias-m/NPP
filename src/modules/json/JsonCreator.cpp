@@ -7,7 +7,6 @@
 #include <iterator>
 #include <cstring>
 
-JsonCreator JsonCreator::parser;
 
 namespace patch
 {
@@ -36,7 +35,7 @@ std::vector<std::string> split(const std::string &s, char delim, const int limit
 }
 
 
-JsonCreator::JsonCreator():ContentCreator("application/json"){
+JsonCreator::JsonCreator(npp::NppServer* server):npp::ContentCreator("application/json", server){
 }
 
 JsonCreator::~JsonCreator() {

@@ -2,16 +2,16 @@
 #define HTTP_ENDPOINT_H
 #include <iostream>
 #include <stdio.h>
-#include "../../../npp/endPoint/EndPoint.hpp"
+#include "../../../includes/npp.hpp"
 #include "../../../npp/utils/Factory.hpp"
 #include "../streams/Response.hpp"
 #include "../streams/Request.hpp"
 
-class HttpEndPoint: public EndPoint
+class HttpEndPoint: public npp::EndPoint
 {
     public:
-        HttpEndPoint(const char* route):EndPoint(route){}
-        virtual void operator()(Request* request);
+        HttpEndPoint(npp::NppServer* server, const char* route):npp::EndPoint(server, route){}
+        virtual void operator()(npp::Request* request);
         virtual void _get(const HttpRequest* request) const;
         virtual void _post(const HttpRequest* request) const;
         inline virtual void _put(const HttpRequest* request) const { (dynamic_cast<HttpResponse*>(request->response))->code = 404; }

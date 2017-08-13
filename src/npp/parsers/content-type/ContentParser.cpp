@@ -1,13 +1,9 @@
-#include "ContentParser.hpp"
-
-
-Factory<ContentParser*> ContentParser::contentType;
-Factory<ContentCreator*> ContentCreator::contentType;
-
-ContentParser::ContentParser(const char* id){
-    ContentParser::contentType.put(id, this);
+#include "../../../includes/npp_parser.hpp"
+#include "../../../includes/npp.hpp"
+npp::ContentParser::ContentParser(const char* id, npp::NppServer* server){
+    server->addContentParser(id, this);
 }
 
-ContentCreator::ContentCreator(const char* id){
-    ContentCreator::contentType.put(id, this);
+npp::ContentCreator::ContentCreator(const char* id, npp::NppServer* server){
+    server->addContentCreator(id, this);
 }

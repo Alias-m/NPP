@@ -1,8 +1,7 @@
 #include "XmlParser.hpp"
 
-XmlParser XmlParser::parser;
 
-XmlParser::XmlParser():ContentParser("application/xml") {}
+XmlParser::XmlParser(npp::NppServer* server):ContentParser("application/xml", server) {}
 XmlParser::~XmlParser() {}
 
 void XmlParser::parse(std::string& text, Element** e) const{

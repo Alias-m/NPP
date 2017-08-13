@@ -3,18 +3,17 @@
 
 #include <thread>
 
-#ifdef WIN32 /* si vous êtes sous Windows */
+#ifdef _WIN32
 
 #include <winsock2.h>
 
-#else /* si vous êtes sous Linux */
-/*
+#else
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <unistd.h> // close
-#include <netdb.h> // gethostbyname
+#include <unistd.h> /* close */
+#include <netdb.h> /* gethostbyname */
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR -1
 #define closesocket(s) close(s)
@@ -22,12 +21,10 @@ typedef int SOCKET;
 typedef struct sockaddr_in SOCKADDR_IN;
 typedef struct sockaddr SOCKADDR;
 typedef struct in_addr IN_ADDR;
-*/
 #endif
-#include <winsock2.h>
 #include <iostream>
 #include <functional>
-#include "../parsers/Parser.hpp"
+#include "../../includes/npp.hpp"
 #include "../Router.hpp"
 #include "Socket.hpp"
 #include <chrono>
@@ -35,14 +32,15 @@ typedef struct in_addr IN_ADDR;
 class SocketServer
 {
     public:
-        SocketServer(int port);
-        void run(std::function<bool(Socket*)> func);
+        SocketServer(npp::NppServer*, int port);
+        void run(std::function<bool(Socket*, npp::NppServer*)> func);
         void run();
         ~SocketServer();
 
     protected:
         Socket* master;
-        bool static defaultCallback(Socket* socket);
-        bool wait(std::function<bool(Socket*)> func);
+        npp::NppServer* server;
+        bool static defaultCallback(Socket* socket, npp::NppServer*);
+        bool wait(std::function<bool(Socket*, npp::NppServer*)> func);
 };
 #endif //HTTP_SERVER_SOCKET_H

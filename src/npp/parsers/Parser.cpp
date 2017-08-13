@@ -1,9 +1,6 @@
-#include "Parser.hpp"
+#include "../../includes/npp.hpp"
 
-Parser Parser::parser;
-Factory<Protocol*> Parser::parsers;
-
-Request* Parser::parse(const char* request) const
+npp::Request* npp::Parser::parse(const char* request, Factory<npp::Protocol*>* parsers, npp::NppServer* server) const
 {
     char method[50];
     char route[1024];
@@ -22,10 +19,11 @@ Request* Parser::parse(const char* request) const
     while(getline(ss, tok))
         body.append(tok);
 
-    Protocol* p = Parser::parsers.get(protocol);
+    Protocol* p = parsers->get(protocol);
     if(p)
-        return p->parse(method, route, req, body);
+        return p->parse(method, route, req, body, server);
     else//TODO: exception
         std::cout << "Unknown Protocol : " << protocol << std::endl;
     return nullptr;
 }
+

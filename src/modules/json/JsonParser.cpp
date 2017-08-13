@@ -6,7 +6,6 @@
 #include <vector>
 #include <iterator>
 #include <cstring>
-JsonParser JsonParser::parser;
 
 template<typename Out>
 void split(const std::string &s, char delim, Out result, const int limit) {
@@ -21,7 +20,7 @@ void split(const std::string &s, char delim, Out result, const int limit) {
 
 std::vector<std::string> split(const std::string &s, char delim, const int limit = -1);
 
-JsonParser::JsonParser():ContentParser("application/json") {
+JsonParser::JsonParser(npp::NppServer* server):ContentParser("application/json", server) {
     elements['{'] = []() -> Element*{return new ElementObject();};
     elements['['] = []() -> Element*{return new ElementArray();};
     elements['\"'] = []() -> Element*{return new ElementString();};

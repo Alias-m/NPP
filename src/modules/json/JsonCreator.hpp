@@ -1,13 +1,12 @@
 #ifndef JSONCREATOR_H
 #define JSONCREATOR_H
-#include "../../npp/parsers/content-type/ContentParser.hpp"
+#include "../../includes/npp_parser.hpp"
 #include <functional>
 #include <map>
 
-class JsonCreator: public ContentCreator
+class JsonCreator: public npp::ContentCreator
 {
     public:
-        static JsonCreator parser;
         void parse(std::string& text, Element** e) const;
         void parseContent(std::string& text, ElementInt* e) const;
         void parseContent(std::string& text, ElementString* e) const;
@@ -15,8 +14,8 @@ class JsonCreator: public ContentCreator
         void parseContent(std::string& text, ElementArray* e) const;
         void parseContent(std::string& text, ElementObject* e) const;
         void parseContent(std::string& text, ElementDouble* e) const;
-    private:
-        JsonCreator();
+        JsonCreator(npp::NppServer* server);
         ~JsonCreator();
+    private:
 };
 #endif //JSONCREATOR_H

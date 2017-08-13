@@ -1,18 +1,17 @@
 #ifndef ROUTER_H
 #define ROUTER_H
-#include "streams/Request.hpp"
+#include "../includes/npp.hpp"
 #include "utils/Factory.hpp"
-#include "endPoint/EndPoint.hpp"
 
 class Router
 {
+friend class npp::NppServer;
 private:
     Router();
-    Factory<EndPoint*> endPoints;
+    Factory<npp::EndPoint*> endPoints;
 public:
-    static Router router;
-    void route(Request* request) const;
-    void addRoute(const char* route, EndPoint* endPoint);
+    void route(npp::Request* request) const;
+    void addRoute(const char* route, npp::EndPoint* endPoint);
 
 };
 

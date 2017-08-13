@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 
-HttpResponse::HttpResponse(bool s): Response(s), code(200), status("OK"){
+HttpResponse::HttpResponse(bool s): npp::Response(s), code(200), status("OK"){
 
     //contentTypes.put("application/json", &JsonCreator::parser);
 
@@ -38,16 +38,16 @@ void HttpResponse::setParameter(const char* key, const char* value){
     parameters.insert(std::pair<const char*, const char*>(key, value));
 }
 
-std::string HttpResponse::getBody(){
+std::string HttpResponse::getBody(npp::NppServer* server){
     std::string bodyText;
     if(body)
-        ContentCreator::contentType.get(contentType.c_str())->parse(bodyText, &body);
+        server->getContentCreator(contentType.c_str())->parse(bodyText, &body);
     return bodyText.c_str();
 }
 
-const char* HttpResponse::createResponse(){
+const char* HttpResponse::createResponse(npp::NppServer* server){
     std::string response;
-    std::string body(getBody());
+    std::string body(getBody(server));
 
     std::string test;
     test.append(patch::to_string(body.length()));

@@ -1,4 +1,4 @@
-#include "ElementCreator.hpp"
+#include "../../includes/npp_parser.hpp"
 #include "../streams/Element.hpp"
 #include <iostream>
 #include <algorithm>
@@ -7,45 +7,45 @@
 #include <iterator>
 #include <cstring>
 
-ElementCreator ElementCreator::creator;
+npp::ElementCreator npp::ElementCreator::creator;
 
-ElementInt* ElementCreator::create(int value) const{
+ElementInt* npp::ElementCreator::create(int value) const{
 	ElementInt* e = new ElementInt();
 	e->value = value;
 	return e;
 }
-ElementString* ElementCreator::create(const char* value) const{
+ElementString* npp::ElementCreator::create(const char* value) const{
 	ElementString* e = new ElementString();
 	e->value = value;
 	return e;
 }
-ElementBoolean* ElementCreator::create(bool value) const{
+ElementBoolean* npp::ElementCreator::create(bool value) const{
 	ElementBoolean* e = new ElementBoolean();
 	e->value = value;
 	return e;
 }
-ElementArray* ElementCreator::array() const{
+ElementArray* npp::ElementCreator::array() const{
 	ElementArray* e = new ElementArray();
 	return e;
 }
-ElementObject* ElementCreator::object() const{
+ElementObject* npp::ElementCreator::object() const{
 	ElementObject* e = new ElementObject();
 	return e;
 }
-ElementCreator* ElementCreator::add(ElementArray* e, Element* value){
+npp::ElementCreator* npp::ElementCreator::add(ElementArray* e, Element* value){
 	e->values.push_back(value);
 	return this;
 }
-ElementCreator* ElementCreator::put(ElementObject* e, const char* key, Element* value){
+npp::ElementCreator* npp::ElementCreator::put(ElementObject* e, const char* key, Element* value){
 	e->values[new std::string(key)] = value;
 	return this;
 }
-ElementDouble* ElementCreator::create(double value) const{
+ElementDouble* npp::ElementCreator::create(double value) const{
 	ElementDouble* e = new ElementDouble();
 	e->value = value;
 	return e;
 }
-ElementCreator::ElementCreator(){
+npp::ElementCreator::ElementCreator(){
 }
-ElementCreator::~ElementCreator(){
+npp::ElementCreator::~ElementCreator(){
 }

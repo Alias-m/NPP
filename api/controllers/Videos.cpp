@@ -1,7 +1,5 @@
 #include "Videos.hpp"
 
-VideoEndPoint VideoEndPoint::singleton("/videos");
-
 void VideoEndPoint::_post(const HttpRequest* request) const
 {
     Video v("Name", 42, 1, 10, "User");

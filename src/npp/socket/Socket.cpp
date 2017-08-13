@@ -25,7 +25,11 @@ Socket::Socket(SOCKET s): socket(s)
 {
     if(socket == INVALID_SOCKET)
     {
+        #ifdef _WIN32
         std::cout << WSAGetLastError() << std::endl;
+        #else
+        perror("Invalid socket");
+        #endif // _WIN32
         exit(errno);
     }
 }
@@ -33,7 +37,11 @@ Socket::Socket(SOCKET s): socket(s)
 void Socket::_bind(sockaddr_in* sin){
     if(bind (socket, (sockaddr *) sin, sizeof (*sin)) == SOCKET_ERROR)
     {
+        #ifdef _WIN32
         std::cout << WSAGetLastError() << std::endl;
+        #else
+        perror("Bind failed");
+        #endif // _WIN32
         exit(errno);
     }
 }
@@ -41,12 +49,16 @@ void Socket::_bind(sockaddr_in* sin){
 void Socket::_listen(){
     if(listen(socket, 32) == SOCKET_ERROR)
     {
+        #ifdef _WIN32
         std::cout << WSAGetLastError() << std::endl;
+        #else
+        perror("Listening failed");
+        #endif // _WIN32
         exit(errno);
     }
 }
 
-Socket* Socket::_accept(sockaddr_in* csin, int size){
+Socket* Socket::_accept(sockaddr_in* csin, accept_size size){
     return new Socket(accept(socket, (sockaddr*)csin, &size));
 }
 
@@ -60,7 +72,7 @@ void Socket::read(std::string& buffer){
     {
         if(recv_to(socket, buff, 1, 0, 1) > 0)
         {
-            buffer += buff;
+            buffer += buff[0];
             select(socket+1, &fdset, NULL, NULL, &tv_timeout);
         }
     }

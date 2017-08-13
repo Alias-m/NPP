@@ -1,6 +1,6 @@
 #include "../includes/http.hpp"
 
-void HttpEndPoint::operator()(Request* request){
+void HttpEndPoint::operator()(npp::Request* request){
     (this->*(HttpLinker::linker.link(request->method)))(dynamic_cast<HttpRequest*>(request));
 }
 

@@ -1,9 +1,10 @@
 #ifndef VIDEO_H
 #define VIDEO_H
-#include "../../src/includes/object.hpp"
 #include <string>
+#include "../../src/includes/npp.hpp"
+#include "../../src/includes/npp_parser.hpp"
 
-class Video: public Object
+class Video: public npp::Object
 {
 public:
     std::string name;
