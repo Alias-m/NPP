@@ -38,8 +38,10 @@ npp::Request* Http::parse(char* method, char* route, std::vector<std::string> re
             func(elements[1].substr(1, elements[1].length() - 2).c_str(), this, r, response, server);
     }
     r->body = new ElementInt();
-    if(parser)
+    if(parser && body.length())
         parser->parse(body, &r->body);
+    else if(!body.length())
+        r->body = new ElementObject();
     return r;
 }
 
