@@ -1,26 +1,5 @@
 #include "Socket.hpp"
 
-int recv_to(int fd, char *buffer, int len, int flags, int to) {
-
-   fd_set readset;
-   int result = -1;
-   struct timeval tv;
-   FD_ZERO(&readset);
-   FD_SET(fd, &readset);
-   tv.tv_usec = to;
-   result = select(fd+1, &readset, NULL, NULL, &tv);
-
-   // Check status
-   if (result < 0)
-      return -1;
-   else if (result > 0 && FD_ISSET(fd, &readset)) {
-      result = recv(fd, buffer, len, flags);
-      return result;
-   }
-   return -2;
-}
-
-
 Socket::Socket(SOCKET s): socket(s)
 {
     if(socket == INVALID_SOCKET)
@@ -70,7 +49,7 @@ void Socket::read(std::string& buffer){
     char buff[2];
     do
     {
-        if(recv_to(socket, buff, 1, 0, 1) > 0)
+        if(recv(socket, buff, 1, 0) > 0)
         {
             buffer += buff[0];
             select(socket+1, &fdset, NULL, NULL, &tv_timeout);
